@@ -1,6 +1,7 @@
 build-essential 
 gcc
 g++
+libgl1
 clang
 libleptonica-dev 
 tesseract-ocr 
