@@ -10,7 +10,7 @@ langchain-text-splitters==0.2.2
 huggingface-hub==0.23.5
 unstructured==0.12.5 
 unstructured-inference==0.7.24
-unstructured.pytesseract 
+unstructured.pytesseract==0.3.12
 pdfminer.six==20231228
 pytesseract==0.3.10
 tiktoken==0.7.0
