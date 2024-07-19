@@ -1,6 +1,7 @@
 streamlit==1.36.0
 cmake==3.27.9
 packaging==24.1
+llama-cpp-python==0.2.79
 langchain==0.2.9
 langchain-chroma==0.1.2
 langchain-community==0.2.7
