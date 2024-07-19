@@ -3,6 +3,7 @@ import os
 from pdf_extractor import PDFExtractor
 from inference_utils import *
 
+os.system('pip install -U flash_attn==2.6.1 --no-build-isolation')
 
 st.title("LLM-Powered Document Chat")
 
