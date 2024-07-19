@@ -3,6 +3,8 @@ cmake==3.27.9
 packaging==24.1
 langchain==0.2.9
 langchain-chroma==0.1.2
+chroma-hnswlib==0.7.5
+chromadb==0.5.4
 langchain-community==0.2.7
 langchain-core==0.2.21
 langchain-huggingface==0.0.3
