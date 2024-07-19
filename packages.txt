@@ -1,3 +1,6 @@
+build-essential 
+g++ 
+clang
 libleptonica-dev 
 tesseract-ocr 
 libtesseract-dev 
