@@ -16,7 +16,6 @@ tesseract-ocr==0.0.1
 tiktoken==0.7.0
 transformers==4.42.4
 einops==0.8.0
-flash_attn==2.6.1
 bitsandbytes==0.43.1 
 accelerate==0.32.1
 rank-bm25==0.2.2
