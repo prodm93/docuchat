@@ -9,10 +9,10 @@ from inference_utils import *
 
 st.title("LLM-Powered Document Chat")
 
-if 'all_texts' not in st.session_state:
+"""if 'all_texts' not in st.session_state:
     st.session_state.all_texts = []
 if 'all_tables' not in st.session_state:
-    st.session_state.all_tables = []
+    st.session_state.all_tables = []"""
 with st.sidebar.form(key='docs_form', clear_on_submit=False):
     st.write("Upload your PDF documents here:")
     documents = st.file_uploader('Documents', type=['pdf'], accept_multiple_files=True, key='doc_pdf', help=None, label_visibility="visible")
@@ -36,10 +36,12 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
                 obj = PDFExtractor(img_path, file_path)
                 texts, tables = obj.categorize_elements()
                 #st.write(texts[0])
-                st.session_state.all_texts.extend(texts)
-                st.session_state.all_tables.extend(tables)
-all_texts, all_tables = st.session_state.all_texts, st.session_state.all_tables
-docs = split_text(all_texts)
+                all_texts.extend(texts)
+                all_tables.extend(tables)
+        st.session_state.all_texts = all_texts
+        st.session_state.all_tables = all_tables
+#all_texts, all_tables = st.session_state.all_texts, st.session_state.all_tables
+docs = split_text(st.session_state.all_texts)
 if 'docs' not in st.session_state:
     st.session_state.docs = docs
 #docs = split_text(st.session_state.all_texts)
