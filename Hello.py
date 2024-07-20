@@ -28,7 +28,7 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
                 st.session_state.all_tables.extend(tables)"""
             temp_dir = tempfile.mkdtemp()
             file_path = os.path.join(temp_dir, doc.name)
-            with open(path, 'wb') as f:
+            with open(file_path, 'wb') as f:
                 f.write(doc.getvalue())
                 obj = PDFExtractor(img_path, file_path)
                 texts, tables = obj.categorize_elements()
