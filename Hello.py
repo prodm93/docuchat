@@ -39,15 +39,15 @@ all_texts, all_tables = st.session_state.all_texts, st.session_state.all_tables
 #st.write(all_texts[0][:250])
 #st.write(all_texts[0][-250:])
 
-st.session_state.all_texts, st.session_state.all_tables = [], []
+#st.session_state.all_texts, st.session_state.all_tables = [], []
 
 with st.form(key='inference_form', clear_on_submit=False):
     question = st.text_input('Question: ')
     submitted = st.form_submit_button(label="Submit", help=None, on_click=None, type="secondary", disabled=False)
     if submitted:
-        st.write(all_texts[0][:250])
-        st.write(all_texts[0][-250:])
-        docs = split_text(all_texts)
+        st.write(st.session_state.all_texts[0][:250])
+        st.write(st.session_state.all_texts[0][-250:])
+        docs = split_text(st.session_state.all_texts)
         rag_extracts = get_rag_hits(docs, 'cross_encoder', question)
         response = infer_query(question, rag_extracts, hf_api_token, model_id="meta-llama/Meta-Llama-3-8B-Instruct")
         st.write(response)
