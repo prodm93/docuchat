@@ -3,7 +3,7 @@ import os
 from pdf_extractor import PDFExtractor
 from inference_utils import *
 
-os.system('pip install -U flash_attn==2.6.1 --no-build-isolation')
+#os.system('pip install -U flash_attn==2.6.1 --no-build-isolation')
 
 st.title("LLM-Powered Document Chat")
 
@@ -17,7 +17,7 @@ with st.sidebar.form(key='guidelines_form', clear_on_submit=False):
         st.session_state.documents = documents
         st.session_state.hf_api_token = hf_api_token
         path = "./pdf_images"
-        fname_list = [PDFExtractor(path, x) for x in documents if x.endswith('.pdf')]
+        fname_list = [PDFExtractor(path, x.name) for x in documents if x.name.endswith('.pdf')]
         all_texts, all_tables = [], []
         for obj in fname_list:
             texts, tables = obj.categorize_elements()
