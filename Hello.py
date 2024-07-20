@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+from tempfile import NamedTemporaryFile
 from pdf_extractor import PDFExtractor
 from inference_utils import *
 
@@ -17,12 +18,14 @@ with st.sidebar.form(key='guidelines_form', clear_on_submit=False):
         st.session_state.documents = documents
         st.session_state.hf_api_token = hf_api_token
         path = "./pdf_images"
-        fname_list = [PDFExtractor(path, x) for x in documents if x.name.endswith('.pdf')]
         all_texts, all_tables = [], []
-        for obj in fname_list:
-            texts, tables = obj.categorize_elements()
-            all_texts.extend(texts)
-            all_tables.extend(tables)
+        with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
+            for doc in documents:
+                f.write(doc.getbuffer())
+                obj = PDFExtractor(path, f.name)
+                texts, tables = obj.categorize_elements()
+                all_texts.extend(texts)
+                all_tables.extend(tables)
 
 with st.form(key='inference_form', clear_on_submit=False):
     question = st.text_input('Question: ')
