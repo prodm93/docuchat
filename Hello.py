@@ -19,8 +19,8 @@ with st.sidebar.form(key='guidelines_form', clear_on_submit=False):
         st.session_state.hf_api_token = hf_api_token
         path = "./pdf_images"
         all_texts, all_tables = [], []
-        with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
-            for doc in documents:
+        for doc in documents:
+            with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
                 f.write(doc.getbuffer())
                 obj = PDFExtractor(path, f.name)
                 texts, tables = obj.categorize_elements()
