@@ -22,6 +22,7 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
         st.session_state.documents = documents
         st.session_state.hf_api_token = hf_api_token
         img_path = "./pdf_images"
+        all_texts, all_tables = [], []
         for doc in documents:
             """with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
                 f.write(doc.getbuffer())
