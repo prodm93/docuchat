@@ -7,12 +7,8 @@ from inference_utils import *
 
 #os.system('pip install -U flash_attn==2.6.1 --no-build-isolation')
 
-st.title("LLM-Powered Document Chat")
+st.title("LLM-Powered RAG Document Chat")
 
-"""if 'all_texts' not in st.session_state:
-    st.session_state.all_texts = []
-if 'all_tables' not in st.session_state:
-    st.session_state.all_tables = []"""
 with st.sidebar.form(key='docs_form', clear_on_submit=False):
     st.write("Upload your PDF documents here:")
     documents = st.file_uploader('Documents', type=['pdf'], accept_multiple_files=True, key='doc_pdf', help=None, label_visibility="visible")
@@ -24,12 +20,6 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
         img_path = "./pdf_images"
         all_texts, all_tables = [], []
         for doc in documents:
-            """with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
-                f.write(doc.getbuffer())
-                obj = PDFExtractor(path, f.name)
-                texts, tables = obj.categorize_elements()
-                st.session_state.all_texts.extend(texts)
-                st.session_state.all_tables.extend(tables)"""
             temp_dir = tempfile.mkdtemp()
             file_path = os.path.join(temp_dir, doc.name)
             with open(file_path, 'wb') as f:
@@ -43,18 +33,10 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
         st.session_state.all_tables = all_tables
         st.session_state.docs = split_text(st.session_state.all_texts)
 
-
-#st.session_state.all_texts, st.session_state.all_tables = [], []
-
 with st.form(key='inference_form', clear_on_submit=False):
     question = st.text_input('Question: ')
-    submitted = st.form_submit_button(label="Submit", help=None, on_click=None, type="secondary", disabled=False)
+    submitted = st.form_submit_button(label="Submit", help=None, on_click=None, type="primary", disabled=False)
     if submitted:
-        #st.write(st.session_state.all_texts[0][:250])
-        #st.write(st.session_state.all_texts[0][-250:])
-        #st.write(st.session_state.all_texts)
-        #docs = split_text(st.session_state.all_texts)
-        #st.write(st.session_state.docs)
         rag_extracts = get_rag_hits(st.session_state.docs, 'cross_encoder', question)
         response = infer_query(question, rag_extracts, hf_api_token, model_id="meta-llama/Meta-Llama-3-8B-Instruct")
         st.write(response)
