@@ -36,18 +36,13 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
                 f.write(doc.getvalue())
                 obj = PDFExtractor(img_path, file_path)
                 texts, tables = obj.categorize_elements()
-                #st.write(texts[0])
+                st.write(texts[0])
                 all_texts.extend(texts)
                 all_tables.extend(tables)
         st.session_state.all_texts = all_texts
         st.session_state.all_tables = all_tables
-#all_texts, all_tables = st.session_state.all_texts, st.session_state.all_tables
-docs = split_text(st.session_state.all_texts)
-if 'docs' not in st.session_state:
-    st.session_state.docs = docs
-#docs = split_text(st.session_state.all_texts)
-#st.write(all_texts[0][:250])
-#st.write(all_texts[0][-250:])
+        st.session_state.docs = split_text(st.session_state.all_texts)
+
 
 #st.session_state.all_texts, st.session_state.all_tables = [], []
 
@@ -59,7 +54,7 @@ with st.form(key='inference_form', clear_on_submit=False):
         #st.write(st.session_state.all_texts[0][-250:])
         #st.write(st.session_state.all_texts)
         #docs = split_text(st.session_state.all_texts)
-        st.write(st.session_state.docs)
+        #st.write(st.session_state.docs)
         rag_extracts = get_rag_hits(st.session_state.docs, 'cross_encoder', question)
         response = infer_query(question, rag_extracts, hf_api_token, model_id="meta-llama/Meta-Llama-3-8B-Instruct")
         st.write(response)
