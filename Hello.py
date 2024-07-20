@@ -24,12 +24,12 @@ with st.sidebar.form(key='guidelines_form', clear_on_submit=False):
             all_texts.extend(texts)
             all_tables.extend(tables)
 
-    with st.form(key='inference_form', clear_on_submit=False):
-        question = st.text_input('Question: ')
-        submitted = st.form_submit_button(label="Submit", help=None, on_click=None, type="secondary", disabled=False)
-        if submitted:
-            docs = split_text(all_texts)
-            rag_extracts = get_rag_hits(docs, 'cross_encoder', question)
-            response = infer_query(question, rag_extracts, hf_api_token, model_id="meta-llama/Meta-Llama-3-8B-Instruct")
-            st.write(response)
+with st.form(key='inference_form', clear_on_submit=False):
+    question = st.text_input('Question: ')
+    submitted = st.form_submit_button(label="Submit", help=None, on_click=None, type="secondary", disabled=False)
+    if submitted:
+        docs = split_text(all_texts)
+        rag_extracts = get_rag_hits(docs, 'cross_encoder', question)
+        response = infer_query(question, rag_extracts, hf_api_token, model_id="meta-llama/Meta-Llama-3-8B-Instruct")
+        st.write(response)
 
