@@ -8,7 +8,7 @@ from inference_utils import *
 
 st.title("LLM-Powered Document Chat")
 
-
+st.session_state.all_texts, st.session_state.all_tables = [], []
 with st.sidebar.form(key='docs_form', clear_on_submit=False):
     st.write("Upload your PDF documents here:")
     documents = st.file_uploader('Documents', type=['pdf'], accept_multiple_files=True, key='doc_pdf', help=None, label_visibility="visible")
@@ -18,7 +18,6 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
         st.session_state.documents = documents
         st.session_state.hf_api_token = hf_api_token
         path = "./pdf_images"
-        st.session_state.all_texts, st.session_state.all_tables = [], []
         for doc in documents:
             with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
                 f.write(doc.getbuffer())
