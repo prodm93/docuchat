@@ -18,7 +18,7 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
     if submitted:
         st.session_state.documents = documents
         st.session_state.hf_api_token = hf_api_token
-        path = "./pdf_images"
+        img_path = "./pdf_images"
         for doc in documents:
             """with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
                 f.write(doc.getbuffer())
@@ -27,10 +27,10 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
                 st.session_state.all_texts.extend(texts)
                 st.session_state.all_tables.extend(tables)"""
             temp_dir = tempfile.mkdtemp()
-            path = os.path.join(temp_dir, doc.name)
+            file_path = os.path.join(temp_dir, doc.name)
             with open(path, 'wb') as f:
                 f.write(doc.getvalue())
-                obj = PDFExtractor(path, f.name)
+                obj = PDFExtractor(img_path, file_path)
                 texts, tables = obj.categorize_elements()
                 st.session_state.all_texts.extend(texts)
                 st.session_state.all_tables.extend(tables)
