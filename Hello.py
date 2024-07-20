@@ -9,7 +9,7 @@ from inference_utils import *
 st.title("LLM-Powered Document Chat")
 
 
-with st.sidebar.form(key='guidelines_form', clear_on_submit=False):
+with st.sidebar.form(key='docs_form', clear_on_submit=False):
     st.write("Upload your PDF documents here:")
     documents = st.file_uploader('Documents', type=['pdf'], accept_multiple_files=True, key='doc_pdf', help=None, label_visibility="visible")
     hf_api_token = st.text_input("Enter your HuggingFace access token/API key:", type='password')
@@ -18,14 +18,16 @@ with st.sidebar.form(key='guidelines_form', clear_on_submit=False):
         st.session_state.documents = documents
         st.session_state.hf_api_token = hf_api_token
         path = "./pdf_images"
-        all_texts, all_tables = [], []
+        st.session_state.all_texts, st.session_state.all_tables = [], []
         for doc in documents:
             with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
                 f.write(doc.getbuffer())
                 obj = PDFExtractor(path, f.name)
                 texts, tables = obj.categorize_elements()
-                all_texts.extend(texts)
-                all_tables.extend(tables)
+                st.session_state.all_texts.extend(texts)
+                st.session_state.all_tables.extend(tables)
+all_texts, all_tables = st.session_state.all_texts, st.session_state.all_tables
+st.session_state.all_texts, st.session_state.all_tables = [], []
 
 with st.form(key='inference_form', clear_on_submit=False):
     question = st.text_input('Question: ')
