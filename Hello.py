@@ -17,7 +17,7 @@ with st.sidebar.form(key='guidelines_form', clear_on_submit=False):
         st.session_state.documents = documents
         st.session_state.hf_api_token = hf_api_token
         path = "./pdf_images"
-        fname_list = [PDFExtractor(path, x.name) for x in documents if x.name.endswith('.pdf')]
+        fname_list = [PDFExtractor(path, x) for x in documents if x.name.endswith('.pdf')]
         all_texts, all_tables = [], []
         for obj in fname_list:
             texts, tables = obj.categorize_elements()
