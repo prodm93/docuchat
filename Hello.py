@@ -36,6 +36,9 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
                 st.session_state.all_texts.extend(texts)
                 st.session_state.all_tables.extend(tables)
 all_texts, all_tables = st.session_state.all_texts, st.session_state.all_tables
+docs = split_text(all_texts)
+st.session_state = docs
+#docs = split_text(st.session_state.all_texts)
 #st.write(all_texts[0][:250])
 #st.write(all_texts[0][-250:])
 
@@ -47,9 +50,10 @@ with st.form(key='inference_form', clear_on_submit=False):
     if submitted:
         #st.write(st.session_state.all_texts[0][:250])
         #st.write(st.session_state.all_texts[0][-250:])
-        st.write(st.session_state.all_texts)
-        docs = split_text(st.session_state.all_texts)
-        rag_extracts = get_rag_hits(docs, 'cross_encoder', question)
+        #st.write(st.session_state.all_texts)
+        #docs = split_text(st.session_state.all_texts)
+        st.write(st.session_state.docs)
+        rag_extracts = get_rag_hits(st.session_state.docs, 'cross_encoder', question)
         response = infer_query(question, rag_extracts, hf_api_token, model_id="meta-llama/Meta-Llama-3-8B-Instruct")
         st.write(response)
 
