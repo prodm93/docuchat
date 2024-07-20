@@ -25,7 +25,7 @@ with st.expander('Guideline Inputs'):
                 all_tables.extend(tables)
 
     with st.form(key='inference_form', clear_on_submit=False):
-        question = st.text_input('Outline: ')
+        question = st.text_input('Question: ')
         submitted = st.form_submit_button(label="Submit", help=None, on_click=None, type="secondary", disabled=False)
         if submitted:
             docs = split_text(all_texts)
