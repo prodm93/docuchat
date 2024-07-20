@@ -9,7 +9,10 @@ from inference_utils import *
 
 st.title("LLM-Powered Document Chat")
 
-st.session_state.all_texts, st.session_state.all_tables = [], []
+if 'all_texts' not in st.session_state:
+    st.session_state.all_texts = []
+if 'all_tables' not in st.session_state:
+    st.session_state.all_tables = []
 with st.sidebar.form(key='docs_form', clear_on_submit=False):
     st.write("Upload your PDF documents here:")
     documents = st.file_uploader('Documents', type=['pdf'], accept_multiple_files=True, key='doc_pdf', help=None, label_visibility="visible")
@@ -37,7 +40,8 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
                 st.session_state.all_tables.extend(tables)
 all_texts, all_tables = st.session_state.all_texts, st.session_state.all_tables
 docs = split_text(all_texts)
-st.session_state = docs
+if 'docs' not in st.session_state:
+    st.session_state.docs = docs
 #docs = split_text(st.session_state.all_texts)
 #st.write(all_texts[0][:250])
 #st.write(all_texts[0][-250:])
