@@ -1,6 +1,7 @@
 import streamlit as st
 import os
-from tempfile import NamedTemporaryFile
+#from tempfile import NamedTemporaryFile
+import tempfile
 from pdf_extractor import PDFExtractor
 from inference_utils import *
 
@@ -19,8 +20,16 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
         st.session_state.hf_api_token = hf_api_token
         path = "./pdf_images"
         for doc in documents:
-            with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
+            """with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
                 f.write(doc.getbuffer())
+                obj = PDFExtractor(path, f.name)
+                texts, tables = obj.categorize_elements()
+                st.session_state.all_texts.extend(texts)
+                st.session_state.all_tables.extend(tables)"""
+            temp_dir = tempfile.mkdtemp()
+            path = os.path.join(temp_dir, doc.name)
+            with open(path, 'wb') as f:
+                f.write(doc.getvalue())
                 obj = PDFExtractor(path, f.name)
                 texts, tables = obj.categorize_elements()
                 st.session_state.all_texts.extend(texts)
