@@ -105,11 +105,7 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
     
     terminators = [tokenizer.eos_token_id,
                        tokenizer.convert_tokens_to_ids("<|eot_id|>")]
-    messages = [
-        {"role": "system", "content": system_input},
-        {"role": "user", "content": user_input},
-    ]
-    
+
     outputs = model.generate(
             input_ids,
             max_new_tokens=512,  # Adjust as needed
