@@ -71,6 +71,7 @@ def main():
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
+                st.write(question)
                 rag_extracts = get_rag_hits(st.session_state.docs, 'cross_encoder', question)
                 response = infer_query_chatbot(question, rag_extracts, st.session_state.hf_api_token, 
                                                model_id="meta-llama/Meta-Llama-3-8B-Instruct")
