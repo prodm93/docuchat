@@ -136,5 +136,5 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         stream=True
     )
 
-    return output_text
+    return output_text.strip('<|eot_id|>')
 
