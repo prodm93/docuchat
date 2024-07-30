@@ -5,6 +5,19 @@ import tempfile
 from pdf_extractor import PDFExtractor
 from inference_utils import *
 
+
+st.markdown(
+    """
+<style>
+    .st-emotion-cache-janbn0 {
+        flex-direction: row-reverse;
+        text-align: right;
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
 #os.system('pip install -U flash_attn==2.6.1 --no-build-isolation')
 
 st.title("LLM-Powered RAG Document Chat")
@@ -71,7 +84,7 @@ def main():
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                st.write(question)
+                st.write(st.session_state.messages)
                 rag_extracts = get_rag_hits(st.session_state.docs, 'cross_encoder', question)
                 response = infer_query_chatbot(question, rag_extracts, st.session_state.hf_api_token, 
                                                model_id="meta-llama/Meta-Llama-3-8B-Instruct")
