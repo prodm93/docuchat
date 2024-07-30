@@ -43,7 +43,14 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
 def main():
 
     #st.title("LLM-Powered RAG Document Query (Chatbot Version)")
- 
+        # Button to clear chat history
+    def clear_chat_history():
+        st.session_state.messages = [
+            {"role": "assistant", "content": "Hi there, how may I assist you today?"}]
+
+    #st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
+    st.button('Clear Chat History', on_click=clear_chat_history)
+    
     # Initialize chat messages session state if not present
     if "messages" not in st.session_state.keys():
         st.session_state.messages = [
@@ -77,14 +84,6 @@ def main():
         # Store the assistant's response in the chat messages
         message = {"role": "assistant", "content": full_response}
         st.session_state.messages.append(message)
-
-    # Button to clear chat history
-    def clear_chat_history():
-        st.session_state.messages = [
-            {"role": "assistant", "content": "How may I assist you today?"}]
-
-    #st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
-    st.button('Clear Chat History', on_click=clear_chat_history)
 
 
 if __name__ == '__main__':
