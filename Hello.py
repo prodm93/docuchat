@@ -37,6 +37,6 @@ with st.form(key='inference_form', clear_on_submit=False):
     submitted = st.form_submit_button(label="Submit", help=None, on_click=None, type="primary", disabled=False)
     if submitted:
         rag_extracts = get_rag_hits(st.session_state.docs, 'cross_encoder', question)
-        response = infer_query(question, rag_extracts, hf_api_token, model_id="meta-llama/Meta-Llama-3.1-8B-Instruct")
+        response = infer_query(question, rag_extracts, hf_api_token, model_id="meta-llama/Meta-Llama-3-8B-Instruct")
         st.write(response)
 
