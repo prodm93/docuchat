@@ -79,7 +79,7 @@ def infer_query(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Ll
     return response
 
 
-def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key, model_id="meta-llama/Meta-Llama-3.1-8B-Instruct"):
+def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key, model_id="meta-llama/Meta-Llama-3-8B-Instruct"):
 
     client = InferenceClient(token=hf_api_key)
     system_input = """You are an assistant chatbot tasked with answering questions from complex documents
@@ -129,7 +129,7 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         #repetition_penalty=0.1,
         max_new_tokens=512,
         do_sample=True,
-        stop_sequences=terminators,
+        stop_sequences=['<|eot_id|>'],
         #skip_prompt=True,
         #skip_special_tokens=True,
         return_full_text=False,
