@@ -130,12 +130,12 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         #repetition_penalty=0.1,
         max_new_tokens=512,
         do_sample=True,
-        stop_sequences=['<|eot_id|>'],
+        #stop_sequences=['<|eot_id|>'],
         #skip_prompt=True,
         #skip_special_tokens=True,
         return_full_text=False,
         stream=True
     )
 
-    return output_text.strip('<|eot_id|>')
+    return output_text
 
