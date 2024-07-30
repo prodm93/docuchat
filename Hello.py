@@ -48,7 +48,7 @@ st.set_page_config(page_title="LLM-Powered RAG Document Query (Chatbot Version)"
 
 def main():
 
-    st.title("LLM-Powered RAG Document Query (Chatbot Version)")
+    #st.title("LLM-Powered RAG Document Query (Chatbot Version)")
  
     # Initialize chat messages session state if not present
     if "messages" not in st.session_state.keys():
