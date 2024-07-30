@@ -91,6 +91,12 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
     user_input = f"""Using the RAG-generated extracts below, please answer my question:
         Question: {question}
         Extracts: {rag_extracts}"""
+
+    tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
+    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+
+    text_streamer = TextStreamer(
+            tokenizer, skip_prompt=True, skip_special_tokens=True)
     
     input_ids = tokenizer.apply_chat_template(
             [{"role": "system", "content": system_input}, {"role": "user", "content": user_input}], 
@@ -103,12 +109,6 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
         {"role": "system", "content": system_input},
         {"role": "user", "content": user_input},
     ]
-
-    tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
-    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-
-    text_streamer = TextStreamer(
-            tokenizer, skip_prompt=True, skip_special_tokens=True)
     
     outputs = model.generate(
             input_ids,
