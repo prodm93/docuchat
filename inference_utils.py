@@ -110,7 +110,7 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
     terminators = [tokenizer.eos_token_id,
                        tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
-    outputs = model.generate(
+    """outputs = model.generate(
             input_ids,
             max_new_tokens=512,  # Adjust as needed
             eos_token_id=terminators,
@@ -120,7 +120,16 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
         )
     
     output_text = tokenizer.decode(
-            outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
+            outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)"""
+    output_text = client.text_generation(
+        prompt=prompt,
+        model=model_id,
+        temperature=0.1,
+        max_new_tokens=512,
+        do_sample=True
+        return_full_text=False,
+        stream=True
+    )
 
     return output_text
 
