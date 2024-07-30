@@ -46,7 +46,7 @@ def main():
         # Button to clear chat history
     def clear_chat_history():
         st.session_state.messages = [
-            {"role": "assistant", "content": "Hi there, how may I assist you today?"}]
+            {"role": "assistant", "content": "Hey there, how may I assist you today?"}]
 
     #st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
     st.button('Clear Chat History', on_click=clear_chat_history)
