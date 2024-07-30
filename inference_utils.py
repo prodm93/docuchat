@@ -94,13 +94,11 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
         Question: {question}
         Extracts: {rag_extracts}"""
     
-    # Prepare input for the model
     input_ids = tokenizer.apply_chat_template(
             [{"role": "system", "content": system_input}, {"role": "user", "content": user_input}], 
             add_generation_prompt=True, return_tensors="pt"
         )
-
-    # Define termination conditions
+    
     terminators = [tokenizer.eos_token_id,
                        tokenizer.convert_tokens_to_ids("<|eot_id|>")]
     messages = [
@@ -111,7 +109,6 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
     tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
     prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
-    # Generate text using the model and streamer
     outputs = model.generate(
             input_ids,
             max_new_tokens=512,  # Adjust as needed
@@ -120,9 +117,8 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
             do_sample=True,
             streamer=text_streamer
         )
-
-        # Decode the generated tokens into text
-        output_text = tokenizer.decode(
+    
+    output_text = tokenizer.decode(
             outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
 
     return output_text
