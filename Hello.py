@@ -72,13 +72,13 @@ def main():
     # Display chat messages
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
-            st.write(message["content"])
+            st.write_stream(message["content"])
 
     # User input for a chat prompt
     if question := st.chat_input():
         st.session_state.messages.append({"role": "user", "content": question})
         with st.chat_message("user"):
-            st.write(question)
+            st.write_stream(question)
 
     # Generate  response if the last message is not from the assistant
     if st.session_state.messages[-1]["role"] != "assistant":
