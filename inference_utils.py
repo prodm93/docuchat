@@ -102,17 +102,17 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
     tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
     prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
-    text_streamer = TextStreamer(
+    """text_streamer = TextStreamer(
             tokenizer, skip_prompt=True, skip_special_tokens=True)
     
     input_ids = tokenizer.apply_chat_template(
             messages, add_generation_prompt=True, return_tensors="pt"
-        )
+        )"""
     
     terminators = [tokenizer.eos_token_id,
                        tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
-    outputs = model.generate(
+    """outputs = model.generate(
             input_ids,
             max_new_tokens=512,  # Adjust as needed
             eos_token_id=terminators,
@@ -122,8 +122,8 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         )
     
     output_text = tokenizer.decode(
-            outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
-    """output_text = client.text_generation(
+            outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)"""
+    output_text = client.text_generation(
         prompt=prompt,
         model=model_id,
         temperature=0.1,
@@ -135,7 +135,7 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         #skip_special_tokens=True,
         return_full_text=False,
         stream=True
-    )"""
+    )
 
 
     return output_text
