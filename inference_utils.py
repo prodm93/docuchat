@@ -126,7 +126,7 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
         model=model_id,
         temperature=0.1,
         max_new_tokens=512,
-        do_sample=True
+        do_sample=True,
         return_full_text=False,
         stream=True
     )
