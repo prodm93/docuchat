@@ -101,12 +101,12 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
     tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
     prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
-    text_streamer = TextStreamer(
+    """text_streamer = TextStreamer(
             tokenizer, skip_prompt=True, skip_special_tokens=True)
     
     input_ids = tokenizer.apply_chat_template(
             messages, add_generation_prompt=True, return_tensors="pt"
-        )
+        )"""
     
     terminators = [tokenizer.eos_token_id,
                        tokenizer.convert_tokens_to_ids("<|eot_id|>")]
@@ -126,9 +126,10 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         prompt=prompt,
         model=model_id,
         temperature=0.1,
+        #repetition_penalty=0.1,
         max_new_tokens=512,
         do_sample=True,
-        stop=terminators,
+        stop_sequences=terminators,
         #skip_prompt=True,
         #skip_special_tokens=True,
         return_full_text=False,
