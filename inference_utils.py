@@ -4,7 +4,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import os
 from huggingface_hub import InferenceClient
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, TextStreamer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_chroma import Chroma
@@ -49,7 +49,7 @@ def get_rag_hits(docs, rerank_method, question: str):
     return rag_extracts
 
 
-def infer_query(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Llama-3-8B-Instruct"):
+def infer_query(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Llama-3.1-8B-Instruct"):
     client = InferenceClient(token=hf_api_key)
     system_input = """You are an assistant tasked with answering questions from complex documents
         using retrieval-augmented generation (RAG). Answer the user question as accurately as possible
@@ -77,3 +77,53 @@ def infer_query(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Ll
     )
     
     return response
+
+
+def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Llama-3.1-8B-Instruct"):
+    text_streamer = TextStreamer(
+            tokenizer, skip_prompt=True, skip_special_tokens=True)
+
+    client = InferenceClient(token=hf_api_key)
+    system_input = """You are an assistant chatbot tasked with answering questions from complex documents
+        using retrieval-augmented generation (RAG). Answer the user question as accurately as possible
+        based on the query hits extracted using RAG, which are both provided by the user. Incorporate information
+        from the conversation history, but only if it is relevant to the current question. If you do not know 
+        the answer,  respond with 'I'm sorry, but I am unable to find an answer to that question.'"""
+
+    user_input = f"""Using the RAG-generated extracts below, please answer my question:
+        Question: {question}
+        Extracts: {rag_extracts}"""
+    
+    # Prepare input for the model
+    input_ids = tokenizer.apply_chat_template(
+            [{"role": "system", "content": system_input}, {"role": "user", "content": user_input}], 
+            add_generation_prompt=True, return_tensors="pt"
+        )
+
+    # Define termination conditions
+    terminators = [tokenizer.eos_token_id,
+                       tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+    messages = [
+        {"role": "system", "content": system_input},
+        {"role": "user", "content": user_input},
+    ]
+
+    tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
+    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+
+    # Generate text using the model and streamer
+    outputs = model.generate(
+            input_ids,
+            max_new_tokens=512,  # Adjust as needed
+            eos_token_id=terminators,
+            temperature=0.1,
+            do_sample=True,
+            streamer=text_streamer
+        )
+
+        # Decode the generated tokens into text
+        output_text = tokenizer.decode(
+            outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
+
+        return output_text
+
