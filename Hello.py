@@ -86,7 +86,8 @@ def main():
             with st.spinner("Thinking..."):
                 st.write(st.session_state.messages[-1]['content'])
                 rag_extracts = get_rag_hits(st.session_state.docs, 'cross_encoder', st.session_state.messages[-1]['content'])
-                response = infer_query_chatbot(question, rag_extracts, st.session_state.hf_api_token, 
+                response = infer_query_chatbot(question, rag_extracts, st.session_state.messages[:-1], 
+                                               st.session_state.hf_api_token, 
                                                model_id="meta-llama/Meta-Llama-3-8B-Instruct")
                 placeholder = st.empty()
                 full_response = ''
