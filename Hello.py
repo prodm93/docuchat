@@ -40,12 +40,6 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
         #response = infer_query(question, rag_extracts, hf_api_token, model_id="meta-llama/Meta-Llama-3-8B-Instruct")
         #st.write(response)
 
-import streamlit as st
-from inference_utils import *
-
-st.set_page_config(page_title="LLM-Powered RAG Document Query (Chatbot Version)")
-
-
 def main():
 
     #st.title("LLM-Powered RAG Document Query (Chatbot Version)")
