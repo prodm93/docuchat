@@ -86,7 +86,8 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         using retrieval-augmented generation (RAG). Answer the user question as accurately as possible
         based on the query hits extracted using RAG, which are both provided by the user. Incorporate information
         from the conversation history, but only if it is relevant to the current question. If you do not know 
-        the answer, respond with 'I'm sorry, but I am unable to find an answer to that question.'"""
+        the answer, respond with 'I'm sorry, but I am unable to find an answer to that question.' Do not make references 
+        to extract numbers in your response."""
 
     user_input = f"""Using the RAG-generated extracts--as well as the conversation history, if relevant--below, please answer my question:
         Question: {question}
