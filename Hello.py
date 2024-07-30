@@ -92,7 +92,8 @@ def main():
                 placeholder = st.empty()
                 full_response = ''
                 for item in response:
-                    full_response += item
+                    if item != '<|eot_id|>':
+                        full_response += item
                     placeholder.markdown(full_response)
                 placeholder.markdown(full_response)
 
