@@ -30,7 +30,7 @@ def main():
             with st.spinner("Thinking..."):
                 rag_extracts = get_rag_hits(st.session_state.docs, 'cross_encoder', question)
                 response = infer_query_chatbot(question, rag_extracts, st.session_state.hf_api_token, 
-                                               model_id="meta-llama/Meta-Llama-3.1-8B-Instruct")
+                                               model_id="meta-llama/Meta-Llama-3-8B-Instruct")
                 placeholder = st.empty()
                 full_response = ''
                 for item in response:
