@@ -92,6 +92,11 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
         Question: {question}
         Extracts: {rag_extracts}"""
 
+    messages = [
+        {"role": "system", "content": system_input},
+        {"role": "user", "content": user_input},
+    ]
+
     tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
     prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
@@ -99,8 +104,7 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
             tokenizer, skip_prompt=True, skip_special_tokens=True)
     
     input_ids = tokenizer.apply_chat_template(
-            [{"role": "system", "content": system_input}, {"role": "user", "content": user_input}], 
-            add_generation_prompt=True, return_tensors="pt"
+            messages, add_generation_prompt=True, return_tensors="pt"
         )
     
     terminators = [tokenizer.eos_token_id,
