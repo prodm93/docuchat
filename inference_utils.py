@@ -128,9 +128,9 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         temperature=0.1,
         max_new_tokens=512,
         do_sample=True,
-        eos_token_id=terminators,
-        skip_prompt=True,
-        skip_special_tokens=True,
+        stop=terminators,
+        #skip_prompt=True,
+        #skip_special_tokens=True,
         return_full_text=False,
         stream=True
     )
