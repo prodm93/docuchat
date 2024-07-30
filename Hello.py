@@ -26,7 +26,6 @@ with st.sidebar.form(key='docs_form', clear_on_submit=False):
                 f.write(doc.getvalue())
                 obj = PDFExtractor(img_path, file_path)
                 texts, tables = obj.categorize_elements()
-                st.write(texts[0])
                 all_texts.extend(texts)
                 all_tables.extend(tables)
         st.session_state.all_texts = all_texts
