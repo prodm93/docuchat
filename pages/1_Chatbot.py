@@ -47,7 +47,8 @@ def main():
         st.session_state.messages = [
             {"role": "assistant", "content": "How may I assist you today?"}]
 
-    st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
+    #st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
+    st.button('Clear Chat History', on_click=clear_chat_history)
 
 
 if __name__ == '__main__':
