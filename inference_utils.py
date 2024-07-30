@@ -125,5 +125,5 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
         output_text = tokenizer.decode(
             outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
 
-        return output_text
+    return output_text
 
