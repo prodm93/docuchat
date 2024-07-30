@@ -80,8 +80,6 @@ def infer_query(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Ll
 
 
 def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Llama-3.1-8B-Instruct"):
-    text_streamer = TextStreamer(
-            tokenizer, skip_prompt=True, skip_special_tokens=True)
 
     client = InferenceClient(token=hf_api_key)
     system_input = """You are an assistant chatbot tasked with answering questions from complex documents
@@ -109,6 +107,9 @@ def infer_query_chatbot(question, rag_extracts, hf_api_key, model_id="meta-llama
     tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
     prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
+    text_streamer = TextStreamer(
+            tokenizer, skip_prompt=True, skip_special_tokens=True)
+    
     outputs = model.generate(
             input_ids,
             max_new_tokens=512,  # Adjust as needed
