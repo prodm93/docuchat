@@ -53,7 +53,7 @@ def get_rag_hits(docs, rerank_method, question: str):
 
 
 def infer_query(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Llama-3.1-8B-Instruct"):
-    client = InferenceClient(token=hf_api_key)
+    client = InferenceClient(token=hf_api_key, timeout=600)
     system_input = """You are an assistant tasked with answering questions from complex documents
         using retrieval-augmented generation (RAG). Answer the user question as accurately as possible
         based on the query hits extracted using RAG, which are both provided by the user. If you do not know the answer, 
@@ -79,7 +79,7 @@ def infer_query(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Ll
 
 def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key, model_id="meta-llama/Meta-Llama-3-8B-Instruct"):
 
-    client = InferenceClient(token=hf_api_key)
+    client = InferenceClient(token=hf_api_key, timeout=600)
     system_input = """You are an assistant chatbot tasked with answering questions from complex documents
         using retrieval-augmented generation (RAG). Answer the user question as accurately as possible
         based on the query hits extracted using RAG, which are both provided by the user. Incorporate information
@@ -97,12 +97,14 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         {"role": "user", "content": user_input},
     ]
     
-    output_text = client.chat_completion(
+    for chunk in client.chat_completion(
         model=model_id,
         messages=messages,
         temperature=0.1,
         max_tokens=512,
         stream=True,
-    )
-    return (chunk.choices[0].delta.content or '' for chunk in output_text)
+    ):
+        content = chunk.choices[0].delta.content
+        if content:
+            yield content
 
