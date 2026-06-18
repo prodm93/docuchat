@@ -4,6 +4,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import nltk
 nltk.download('punkt_tab', quiet=True)
+nltk.download('averaged_perceptron_tagger_eng')
 
 import os
 from huggingface_hub import InferenceClient
