@@ -37,6 +37,5 @@ opentelemetry-sdk==1.25.0
 opentelemetry-semantic-conventions==0.46b0
 opentelemetry-util-http==0.46b0
 pysqlite3-binary==0.5.3
-chromadb==0.5.4
 onnxruntime==1.14.1
 rich==13.7.1
