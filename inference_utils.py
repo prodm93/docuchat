@@ -8,7 +8,6 @@ nltk.download('averaged_perceptron_tagger_eng')
 
 import os
 from huggingface_hub import InferenceClient
-from transformers import AutoTokenizer, TextStreamer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import Qdrant
@@ -69,19 +68,14 @@ def infer_query(question, rag_extracts, hf_api_key, model_id="meta-llama/Meta-Ll
         {"role": "user", "content": user_input},
     ]
 
-    tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
-    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    response = client.text_generation(
-        prompt=prompt,
+    response = client.chat_completion(
         model=model_id,
+        messages=messages,
         temperature=0.1,
-        max_new_tokens=512,
-        seed=42,
-        return_full_text=False
+        max_tokens=512,
     )
+    return response.choices[0].message.content
     
-    return response
-
 
 def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key, model_id="meta-llama/Meta-Llama-3-8B-Instruct"):
 
@@ -102,45 +96,13 @@ def infer_query_chatbot(question, rag_extracts, conversation_history, hf_api_key
         {"role": "system", "content": system_input},
         {"role": "user", "content": user_input},
     ]
-
-    tokenizer = AutoTokenizer.from_pretrained(model_id, token=hf_api_key)
-    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-
-    """text_streamer = TextStreamer(
-            tokenizer, skip_prompt=True, skip_special_tokens=True)
     
-    input_ids = tokenizer.apply_chat_template(
-            messages, add_generation_prompt=True, return_tensors="pt"
-        )"""
-    
-    terminators = [tokenizer.eos_token_id,
-                       tokenizer.convert_tokens_to_ids("<|eot_id|>")]
-
-    """outputs = model.generate(
-            input_ids,
-            max_new_tokens=512,  # Adjust as needed
-            eos_token_id=terminators,
-            temperature=0.1,
-            do_sample=True,
-            streamer=text_streamer
-        )
-    
-    output_text = tokenizer.decode(
-            outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)"""
-    output_text = client.text_generation(
-        prompt=prompt,
+    output_text = client.chat_completion(
         model=model_id,
+        messages=messages,
         temperature=0.1,
-        #repetition_penalty=0.1,
-        max_new_tokens=512,
-        do_sample=True,
-        stop_sequences=['<|eot_id|>', tokenizer.eos_token],
-        #skip_prompt=True,
-        #skip_special_tokens=True,
-        return_full_text=False,
-        stream=True
+        max_tokens=512,
+        stream=True,
     )
-
-
-    return output_text
+    return (chunk.choices[0].delta.content or '' for chunk in output_text)
 
