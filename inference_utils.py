@@ -7,7 +7,7 @@ from huggingface_hub import InferenceClient
 from transformers import AutoTokenizer, TextStreamer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
-from langchain_chroma import Chroma
+from langchain_community.vectorstores import Qdrant
 from langchain.docstore.document import Document
 from langchain.retrievers import BM25Retriever, EnsembleRetriever, ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import FlashrankRerank, CrossEncoderReranker
@@ -23,7 +23,7 @@ def split_text(all_texts, chunk_size=128, chunk_overlap=10):
 
 def get_rag_hits(docs, rerank_method, question: str):
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-    db = Chroma.from_documents(docs, embeddings)
+    db = Qdrant.from_documents(docs, embeddings, location=":memory:", collection_name="docs")
     k_val = len(docs)//50 if len(docs) > 250 else 7
     dense_retriever = db.as_retriever(search_kwargs = {"k":k_val})
     sparse_retriever = BM25Retriever.from_documents(docs)
