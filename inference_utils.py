@@ -2,6 +2,9 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
+import nltk
+nltk.download('punkt_tab', quiet=True)
+
 import os
 from huggingface_hub import InferenceClient
 from transformers import AutoTokenizer, TextStreamer
