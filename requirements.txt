@@ -1,6 +1,7 @@
 streamlit==1.36.0
 cmake==3.27.9
-numpy<2
+protobuf<=3.20
+packaging==24.1
 langchain==0.2.9
 langchain-chroma==0.1.2
 chroma-hnswlib==0.7.5
@@ -36,5 +37,6 @@ opentelemetry-sdk==1.25.0
 opentelemetry-semantic-conventions==0.46b0
 opentelemetry-util-http==0.46b0
 pysqlite3-binary==0.5.3
+chromadb==0.5.4
 onnxruntime==1.16.3
 rich==13.7.1
